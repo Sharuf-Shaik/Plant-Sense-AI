@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantSense AI Field Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 40px; }
+        .header { border-bottom: 3px solid #1e6f4e; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .header h1 { margin: 0; color: #1e6f4e; }
+        .timestamp { color: #666; font-size: 0.9em; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; color: #2c3e50; border-left: 5px solid #2ecc71; padding-left: 10px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+        .stat-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee; }
+        .stat-row:last-child { border-bottom: none; }
+        .value { font-weight: bold; }
+        .risk-pill { padding: 4px 12px; border-radius: 20px; color: white; font-weight: bold; }
+        .risk-healthy { background: #2ecc71; }
+        .risk-moderate { background: #f1c40f; color: #333; }
+        .risk-high { background: #e74c3c; }
+        .alert { padding: 10px; margin-top: 5px; border-radius: 4px; font-size: 0.9em; }
+        .alert-red { background: #fdeaea; border-left: 4px solid #e74c3c; color: #c0392b; }
+        .alert-yellow { background: #fffbe6; border-left: 4px solid #f1c40f; color: #856404; }
+        .alert-green { background: #eef9f1; border-left: 4px solid #2ecc71; color: #1e7e34; }
+        @media print {
+            button { display: none; }
+            body { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <p style="margin: 0; color: #1e6f4e; font-weight: bold;">PlantSense AI</p>
+            <h1>Precision Field Report</h1>
+        </div>
+        <div class="timestamp">Generated: {{ timestamp }}</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Field Risk Assessment</div>
+        <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <span class="risk-pill risk-{{ risk_level_class }}">{{ risk_level }}</span>
+                    <span style="margin-left: 10px; font-weight: bold;">Score: {{ risk_score }}%</span>
+                </div>
+            </div>
+            <p style="margin-top: 15px;">{{ report_summary }}</p>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="section">
+            <div class="section-title">Environmental Conditions</div>
+            <div class="card">
+                <div class="stat-row"><span>Air Temperature</span><span class="value">{{ temp }}°C</span></div>
+                <div class="stat-row"><span>Air Humidity</span><span class="value">{{ humidity }}%</span></div>
+                <div class="stat-row"><span>Soil Moisture</span><span class="value">{{ soil_moisture }} m³/m³</span></div>
+                <div class="stat-row"><span>Leaf Wetness (Est)</span><span class="value">{{ leaf_wetness }}%</span></div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">Spectral Health Indices</div>
+            <div class="card">
+                <div class="stat-row"><span>NDVI (Overall)</span><span class="value">{{ ndvi }}</span></div>
+                <div class="stat-row"><span>EVI (Biomass)</span><span class="value">{{ evi }}</span></div>
+                <div class="stat-row"><span>NDWI (Water Content)</span><span class="value">{{ ndwi }}</span></div>
+                <div class="stat-row"><span>GDD (Pest Phase)</span><span class="value">{{ gdd }}</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Critical Alerts & Recommendations</div>
+        {% for alert in alerts %}
+            <div class="alert alert-{{ alert.level }}">{{ alert.message }}</div>
+        {% endfor %}
+        {% if not alerts %}
+            <div class="alert alert-green">No major threats detected. Continue standard maintenance.</div>
+        {% endif %}
+    </div>
+
+    <div style="margin-top: 50px; text-align: center;">
+        <button onclick="window.print()" style="padding: 10px 25px; background: #1e6f4e; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1em;">Print as PDF</button>
+    </div>
+
+    <footer style="margin-top: 40px; font-size: 0.8em; color: #999; border-top: 1px solid #eee; padding-top: 10px;">
+        PlantSense AI - Precision Agriculture Monitoring Platform Prototype.
+    </footer>
+</body>
+</html>
